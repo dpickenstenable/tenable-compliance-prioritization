@@ -113,6 +113,52 @@ Use the compliance-prioritizer agent with my Tenable MCP
 server to analyze asset group "Production-Servers"
 ```
 
+### Using Opus Model for More Thorough Analysis
+
+By default, agents run with the Sonnet model. For more comprehensive, thorough analysis, you can upgrade to the **Opus model with high effort**.
+
+**When to use Opus:**
+- Complex compliance scans with 500+ failed checks
+- Need deeper analysis and more detailed recommendations
+- Want exhaustive remediation plans with step-by-step details
+- Preparing for audits requiring comprehensive documentation
+- First-time analysis of a new environment
+
+**How to use Opus:**
+
+In your Claude Code conversation, specify the model before invoking the agent:
+
+```
+Switch to Opus model
+
+Then run the compliance-prioritizer agent on Windows_Compliance_Scan.csv 
+with high effort analysis
+```
+
+**Or use the direct command:**
+
+```
+/model opus
+
+Run the compliance-prioritizer agent with comprehensive analysis 
+on Windows_Compliance_Scan.csv
+```
+
+**What changes with Opus + high effort:**
+- ✅ More detailed risk analysis for each finding
+- ✅ Deeper context about why each failure matters
+- ✅ More comprehensive remediation instructions
+- ✅ Additional cross-references between related findings
+- ✅ More thorough testing and validation steps
+- ✅ Longer, more detailed reports (expect 2-3x length)
+
+**Trade-offs:**
+- ⏱️ Takes longer to complete (2-5x slower than Sonnet)
+- 💰 Uses more tokens (higher cost)
+- 📄 Generates longer reports (more to read)
+
+**Recommendation:** Start with Sonnet for quick weekly scans, use Opus for quarterly deep-dives or audit preparation.
+
 ## What Happens When You Run It
 
 1. **Agent starts**: Claude Code spawns the compliance-prioritizer agent
