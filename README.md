@@ -2,6 +2,12 @@
 
 **AI-powered risk-based prioritization for Tenable VM compliance benchmark failures**
 
+## 🚀 New User? Start Here
+
+**[→ Installation & Usage Guide (INSTALL.md)](INSTALL.md)** - Complete walkthrough for installing and running this agent in Claude Code
+
+Already installed? Jump to [Quick Start](#quick-start) below.
+
 ## Overview
 
 The `compliance-prioritizer` agent analyzes Tenable Vulnerability Management compliance scan results and intelligently prioritizes failed benchmarks based on:
@@ -13,7 +19,17 @@ The `compliance-prioritizer` agent analyzes Tenable Vulnerability Management com
 
 ## Quick Start
 
+**First time?** See [INSTALL.md](INSTALL.md) for complete installation and usage instructions.
+
 ### Basic Usage (Export File)
+
+From within a Claude Code conversation, use natural language:
+
+```
+Run the compliance-prioritizer agent on the file /path/to/scan.csv
+```
+
+**Or use the direct agent invocation** (Claude Code handles this automatically):
 
 ```javascript
 Agent({
@@ -23,6 +39,8 @@ Agent({
 ```
 
 The agent will generate 4 comprehensive reports automatically.
+
+> **Note**: You don't type the JavaScript code yourself - just tell Claude Code in natural language what you want to analyze, and it will invoke the agent for you.
 
 ## Data Sources
 
