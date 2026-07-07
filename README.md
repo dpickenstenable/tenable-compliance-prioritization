@@ -1,16 +1,16 @@
-# Compliance Prioritizer Agent
+# Compliance Prioritizer Skill
 
 **AI-powered risk-based prioritization for Tenable VM compliance benchmark failures**
 
 ## 🚀 New User? Start Here
 
-**[→ Installation & Usage Guide (INSTALL.md)](INSTALL.md)** - Complete walkthrough for installing and running this agent in Claude Code
+**[→ Installation & Usage Guide (INSTALL.md)](INSTALL.md)** - Complete walkthrough for installing and invoking this skill in Claude Code
 
 Already installed? Jump to [Quick Start](#quick-start) below.
 
 ## Overview
 
-The `compliance-prioritizer` agent analyzes Tenable Vulnerability Management compliance scan results and intelligently prioritizes failed benchmarks based on:
+The `compliance-prioritizer` skill analyzes Tenable Vulnerability Management compliance scan results and intelligently prioritizes failed benchmarks based on:
 
 - **Business Impact** (35%): What does this control protect?
 - **Asset Criticality** (35%): How important is the affected system?
@@ -23,32 +23,23 @@ The `compliance-prioritizer` agent analyzes Tenable Vulnerability Management com
 
 ### Basic Usage (Export File)
 
-From within a Claude Code conversation, use natural language:
+From within a Claude Code conversation, invoke the skill:
 
 ```
-Run the compliance-prioritizer agent on the file /path/to/scan.csv
+/compliance-prioritizer Analyze the compliance scan from /path/to/scan.csv
 ```
 
-**Or use the direct agent invocation** (Claude Code handles this automatically):
+The skill will generate 4 comprehensive reports automatically.
 
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Analyze the compliance scan from /path/to/scan.csv"
-})
-```
-
-The agent will generate 4 comprehensive reports automatically.
-
-> **Note**: You don't type the JavaScript code yourself - just tell Claude Code in natural language what you want to analyze, and it will invoke the agent for you.
+> **Note**: Invoke the skill with `/compliance-prioritizer`, then describe in natural language what you want to analyze.
 
 ## Data Sources
 
-The agent supports **three input methods**:
+The skill supports **three input methods**:
 
 ### 1. Export File (Simplest)
 - Export CSV/JSON from Tenable UI
-- Provide file path to agent
+- Provide file path to the skill
 - Works offline, no API setup needed
 
 ### 2. Tenable API (Real-time)
@@ -84,19 +75,16 @@ No setup required! Just export your scan and provide the path.
 
 **Step 2: Test Connection (Optional)**
 ```bash
-cd ~/.claude/agents
+cd ~/.claude/skills/compliance-prioritizer/
 ./test-tenable-api.sh
 ```
 
-**Step 3: Use with Agent**
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Fetch compliance results from Tenable.io for scan ID 12345"
-})
+**Step 3: Use with the Skill**
+```
+/compliance-prioritizer Fetch compliance results from Tenable.io for scan ID 12345
 ```
 
-The agent will prompt for your API keys interactively.
+The skill will prompt for your API keys interactively.
 
 ### For MCP Method
 
@@ -121,17 +109,14 @@ Add to your `~/.claude/config.json`:
 
 **Step 2: Restart Claude Code**
 
-**Step 3: Use with Agent**
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Use Tenable MCP to analyze asset group 'Production-Servers'"
-})
+**Step 3: Use with the Skill**
+```
+/compliance-prioritizer Use Tenable MCP to analyze asset group 'Production-Servers'
 ```
 
 ## Output Reports
 
-The agent generates **4 comprehensive reports**:
+The skill generates **4 comprehensive reports**:
 
 ### 1. CSV Ranked List
 - Complete prioritized list of all failed checks
@@ -204,57 +189,45 @@ Risk Score = (Business Impact × 0.35) + (Asset Criticality × 0.35) +
 ## Example Use Cases
 
 ### Use Case 1: New Compliance Scan Analysis
-```javascript
+```
 // You just ran a CIS benchmark scan on 50 Windows servers
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: `Analyze compliance scan export at ./scans/windows_cis_scan.csv
-           
-           Context: These are production application servers (criticality: 8/10)
-           hosting customer-facing web applications with PCI data.`
-})
+/compliance-prioritizer Analyze compliance scan export at ./scans/windows_cis_scan.csv
+
+Context: These are production application servers (criticality: 8/10)
+hosting customer-facing web applications with PCI data.
 
 // Result: Prioritized list focusing on PCI-relevant controls
 ```
 
 ### Use Case 2: Continuous Compliance Monitoring
-```javascript
+```
 // Weekly automated check via API
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: `Fetch latest compliance results from Tenable.io for 
-           asset group 'PCI-Scope' and generate weekly report.
-           
-           Focus on failed checks that changed since last week.`
-})
+/compliance-prioritizer Fetch latest compliance results from Tenable.io for
+asset group 'PCI-Scope' and generate weekly report.
+
+Focus on failed checks that changed since last week.
 
 // Result: Tracks compliance drift over time
 ```
 
 ### Use Case 3: Pre-Audit Preparation
-```javascript
+```
 // 30 days before SOC 2 audit
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: `Analyze all compliance scans for assets tagged 'in-scope'
-           
-           Context: SOC 2 Type II audit in 30 days
-           Priority: High-risk findings that auditors will flag`
-})
+/compliance-prioritizer Analyze all compliance scans for assets tagged 'in-scope'
+
+Context: SOC 2 Type II audit in 30 days
+Priority: High-risk findings that auditors will flag
 
 // Result: Focused remediation plan for audit readiness
 ```
 
 ### Use Case 4: Risk Acceptance Decisions
-```javascript
+```
 // Quarterly risk review
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: `Analyze compliance scan for legacy manufacturing systems
-           
-           Context: Asset criticality: 5/10 (isolated OT network)
-           Need: Identify which failures can be risk-accepted vs must-fix`
-})
+/compliance-prioritizer Analyze compliance scan for legacy manufacturing systems
+
+Context: Asset criticality: 5/10 (isolated OT network)
+Need: Identify which failures can be risk-accepted vs must-fix
 
 // Result: Risk-ranked list for risk acceptance committee
 ```
@@ -264,35 +237,35 @@ Agent({
 ### Custom Asset Criticality
 Override default scoring by providing context:
 
-```javascript
-prompt: `Analyze scan.csv
-         
-         Asset context:
-         - db-prod-01: criticality 10/10 (customer database)
-         - app-staging-02: criticality 3/10 (isolated staging)
-         - web-dmz-03: criticality 9/10 (internet-facing)`
+```
+/compliance-prioritizer Analyze scan.csv
+
+Asset context:
+- db-prod-01: criticality 10/10 (customer database)
+- app-staging-02: criticality 3/10 (isolated staging)
+- web-dmz-03: criticality 9/10 (internet-facing)
 ```
 
 ### Multiple Asset Analysis
 Analyze consolidated scans across environments:
 
-```javascript
-prompt: `Analyze compliance across all environments:
-         - Production: scan_prod.csv
-         - Staging: scan_staging.csv  
-         - Development: scan_dev.csv
-         
-         Generate consolidated report with environment-specific priorities`
+```
+/compliance-prioritizer Analyze compliance across all environments:
+- Production: scan_prod.csv
+- Staging: scan_staging.csv  
+- Development: scan_dev.csv
+
+Generate consolidated report with environment-specific priorities
 ```
 
 ### Compliance Framework Focus
 Target specific frameworks:
 
-```javascript
-prompt: `Analyze scan.csv focusing on PCI-DSS requirements
-         
-         Highlight findings mapped to PCI requirements 10.x (logging)
-         and 8.x (access control)`
+```
+/compliance-prioritizer Analyze scan.csv focusing on PCI-DSS requirements
+
+Highlight findings mapped to PCI requirements 10.x (logging)
+and 8.x (access control)
 ```
 
 ## Troubleshooting
@@ -311,7 +284,7 @@ prompt: `Analyze scan.csv focusing on PCI-DSS requirements
 
 **"Rate Limited"**
 - Wait 60 seconds and retry
-- Agent automatically implements backoff
+- The skill automatically implements backoff
 - Reduce concurrent analysis if running multiple
 
 **"MCP Server Not Connected"**
@@ -348,8 +321,8 @@ prompt: `Analyze scan.csv focusing on PCI-DSS requirements
 ## Files Included
 
 ```
-~/.claude/agents/
-├── compliance-prioritizer.md              # Main agent definition
+~/.claude/skills/compliance-prioritizer/
+├── SKILL.md                               # Main skill definition
 ├── compliance-prioritizer-README.md       # This file
 ├── compliance-prioritizer-setup-guide.md  # Detailed setup instructions
 └── test-tenable-api.sh                    # API connection test script
@@ -366,11 +339,8 @@ prompt: `Analyze scan.csv focusing on PCI-DSS requirements
 - Critical gaps remain unaddressed
 
 **With compliance-prioritizer**:
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Analyze Windows_Workstation_Compliance.csv"
-})
+```
+/compliance-prioritizer Analyze Windows_Workstation_Compliance.csv
 ```
 
 **Results**:
@@ -396,7 +366,7 @@ Agent({
 
 ## License
 
-This agent is provided as-is for use with Claude Code. Modify as needed for your environment.
+This skill is provided as-is for use with Claude Code. Modify as needed for your environment.
 
 ---
 

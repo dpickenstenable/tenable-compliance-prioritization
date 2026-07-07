@@ -1,6 +1,6 @@
 # Compliance Prioritizer Setup Guide
 
-This guide helps you prepare for using the `compliance-prioritizer` agent with different data sources.
+This guide helps you prepare for using the `compliance-prioritizer` skill with different data sources.
 
 ## Option 1: Export File (Easiest)
 
@@ -11,7 +11,7 @@ This guide helps you prepare for using the `compliance-prioritizer` agent with d
    - **JSON** - Full detail
    - **XML** - Alternative format
 3. Download the file
-4. Note the file path for the agent
+4. Note the file path for the skill
 
 ### From Tenable.sc UI:
 1. Navigate to **Scan Results** → Select compliance scan
@@ -20,7 +20,7 @@ This guide helps you prepare for using the `compliance-prioritizer` agent with d
 
 **Usage:**
 ```
-Agent: "Analyze compliance scan from /path/to/export.csv"
+/compliance-prioritizer Analyze compliance scan from /path/to/export.csv
 ```
 
 ---
@@ -54,7 +54,7 @@ Agent: "Analyze compliance scan from /path/to/export.csv"
 
 ### B. Using the API Keys
 
-The agent will prompt you step-by-step:
+The skill will prompt you step-by-step:
 
 **For Tenable.io:**
 ```
@@ -98,7 +98,7 @@ The agent will prompt you step-by-step:
 
 ### A. Check if MCP Server is Connected
 
-From Claude Code, the agent will automatically check if your Tenable MCP server is available.
+From Claude Code, the skill will automatically check if your Tenable MCP server is available.
 
 ### B. If Not Connected, Set Up MCP Server
 
@@ -126,7 +126,7 @@ MCP servers are configured in your Claude Code settings:
 3. Restart Claude Code
 4. MCP server will auto-connect with stored credentials
 
-**Note:** MCP server setup is one-time. After configuration, the agent can use it without asking for credentials each time.
+**Note:** MCP server setup is one-time. After configuration, the skill can use it without asking for credentials each time.
 
 ---
 
@@ -151,8 +151,8 @@ MCP servers are configured in your Claude Code settings:
 - ❌ **DON'T:** Commit keys to git repositories
 - ❌ **DON'T:** Use admin/write-enabled keys for read-only tasks
 
-### Agent Credential Handling
-The compliance-prioritizer agent:
+### Skill Credential Handling
+The compliance-prioritizer skill:
 - Requests credentials interactively (not stored in prompts)
 - Uses credentials only for immediate API calls
 - Clears credentials from memory after execution
@@ -186,7 +186,7 @@ The compliance-prioritizer agent:
 
 ### "Rate Limited" (429 Error)
 - ✅ Wait 60 seconds and retry
-- ✅ Agent will automatically retry with backoff
+- ✅ Skill will automatically retry with backoff
 - ✅ Reduce concurrent requests if running multiple analyses
 
 ### "MCP Server Not Connected"
@@ -207,35 +207,23 @@ The compliance-prioritizer agent:
 
 ### Quick Start - File Export
 ```
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Analyze /Users/me/Downloads/windows_compliance_scan.csv"
-})
+/compliance-prioritizer Analyze /Users/me/Downloads/windows_compliance_scan.csv
 ```
 
 ### Real-Time - API (Tenable.io)
 ```
-Agent({
-  subagent_type: "compliance-prioritizer", 
-  prompt: "Fetch and analyze compliance results for scan ID 12345 from Tenable.io"
-})
-# Agent will prompt for API keys interactively
+/compliance-prioritizer Fetch and analyze compliance results for scan ID 12345 from Tenable.io
+# The skill will prompt for API keys interactively
 ```
 
 ### Enterprise - MCP Server
 ```
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Use Tenable MCP to analyze compliance for asset group 'Production-Databases'"
-})
+/compliance-prioritizer Use Tenable MCP to analyze compliance for asset group 'Production-Databases'
 ```
 
 ### Multi-Asset Analysis
 ```
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Get compliance results from Tenable.io for all assets tagged 'pci-scope' and prioritize by risk"
-})
+/compliance-prioritizer Get compliance results from Tenable.io for all assets tagged 'pci-scope' and prioritize by risk
 ```
 
 ---
@@ -247,7 +235,7 @@ Agent({
 - **Tenable.sc API:** https://docs.tenable.com/security-center/api/
 - **MCP Protocol:** https://modelcontextprotocol.io/
 
-If you encounter issues with the agent, check:
+If you encounter issues with the skill, check:
 1. Your API keys are valid and have correct permissions
 2. Network connectivity to Tenable instance
 3. Scan/asset IDs are correct

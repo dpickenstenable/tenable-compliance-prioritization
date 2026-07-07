@@ -1,6 +1,6 @@
 # Installation & Usage Guide
 
-This guide explains how to install and run the Compliance Prioritizer agent in Claude Code.
+This guide explains how to install and invoke the Compliance Prioritizer skill in Claude Code.
 
 ## What You Need
 
@@ -11,36 +11,38 @@ This guide explains how to install and run the Compliance Prioritizer agent in C
 
 ### Option 1: Install from Repository (Recommended)
 
-If this agent is available in the claude-gsd repository:
+If this skill is available in the claude-gsd repository:
 
 ```bash
 # From Claude Code prompt
 /install compliance-prioritizer
 ```
 
-The agent will be automatically installed to `~/.claude/agents/`
+The skill will be automatically installed to `~/.claude/skills/compliance-prioritizer/`
 
 ### Option 2: Manual Installation
 
 1. Clone or download this repository:
    ```bash
-   cd ~/.claude/agents
    git clone https://github.com/dpickenstenable/tenable-compliance-prioritization.git
    ```
 
-2. Copy the agent definition file:
+2. Copy the skill files so `~/.claude/skills/compliance-prioritizer/` contains the skill:
    ```bash
-   cp tenable-compliance-prioritization/compliance-prioritizer.md ~/.claude/agents/
+   mkdir -p ~/.claude/skills/compliance-prioritizer
+   cp tenable-compliance-prioritization/compliance-prioritizer/* ~/.claude/skills/compliance-prioritizer/
+   chmod +x ~/.claude/skills/compliance-prioritizer/test-tenable-api.sh
    ```
 
 3. Verify installation:
    ```bash
-   ls ~/.claude/agents/compliance-prioritizer.md
+   ls ~/.claude/skills/compliance-prioritizer/SKILL.md
+   ls ~/.claude/skills/compliance-prioritizer/test-tenable-api.sh
    ```
 
-## How to Run the Agent
+## How to Invoke the Skill
 
-The agent runs **inside Claude Code** conversations. You interact with it through natural language prompts.
+The skill runs **inside Claude Code** conversations. You invoke it with `/compliance-prioritizer` and interact through natural language prompts.
 
 ### Step 1: Start Claude Code
 
@@ -58,29 +60,20 @@ cd /path/to/your/scans
 
 Or if using API method, no navigation needed.
 
-### Step 3: Run the Agent
+### Step 3: Invoke the Skill
 
 #### Method A: Using an Exported File
 
 In the Claude Code conversation, type:
 
 ```
-Please run the compliance-prioritizer agent on the file Windows_Compliance_Scan.csv
+/compliance-prioritizer Analyze the file Windows_Compliance_Scan.csv
 ```
 
 Or be more specific:
 
 ```
-Use Agent with subagent_type "compliance-prioritizer" to analyze 
-/Users/me/Downloads/Windows_Compliance_Scan.csv
-```
-
-**Behind the scenes**, Claude Code will execute:
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Analyze /Users/me/Downloads/Windows_Compliance_Scan.csv"
-})
+/compliance-prioritizer Analyze /Users/me/Downloads/Windows_Compliance_Scan.csv
 ```
 
 #### Method B: Using Tenable API
@@ -88,11 +81,10 @@ Agent({
 In the Claude Code conversation, type:
 
 ```
-Run the compliance-prioritizer agent to fetch and analyze 
-scan ID 12345 from my Tenable.io account
+/compliance-prioritizer Fetch and analyze scan ID 12345 from my Tenable.io account
 ```
 
-The agent will interactively prompt you for:
+The skill will interactively prompt you for:
 - Platform selection (Tenable.io or Tenable.sc)
 - API Access Key
 - API Secret Key
@@ -106,16 +98,15 @@ First, verify your MCP server is connected:
 Check if my Tenable MCP server is connected
 ```
 
-Then run:
+Then invoke the skill:
 
 ```
-Use the compliance-prioritizer agent with my Tenable MCP 
-server to analyze asset group "Production-Servers"
+/compliance-prioritizer Use my Tenable MCP server to analyze asset group "Production-Servers"
 ```
 
 ### Using Opus Model for More Thorough Analysis
 
-By default, agents run with the Sonnet model. For more comprehensive, thorough analysis, you can upgrade to the **Opus model with high effort**.
+By default, Claude Code runs with the Sonnet model. For more comprehensive, thorough analysis, you can upgrade to the **Opus model with high effort**.
 
 **When to use Opus:**
 - Complex compliance scans with 500+ failed checks
@@ -126,12 +117,12 @@ By default, agents run with the Sonnet model. For more comprehensive, thorough a
 
 **How to use Opus:**
 
-In your Claude Code conversation, specify the model before invoking the agent:
+In your Claude Code conversation, specify the model before invoking the skill:
 
 ```
 Switch to Opus model
 
-Then run the compliance-prioritizer agent on Windows_Compliance_Scan.csv 
+Then invoke /compliance-prioritizer on Windows_Compliance_Scan.csv 
 with high effort analysis
 ```
 
@@ -140,7 +131,7 @@ with high effort analysis
 ```
 /model opus
 
-Run the compliance-prioritizer agent with comprehensive analysis 
+/compliance-prioritizer Run comprehensive analysis 
 on Windows_Compliance_Scan.csv
 ```
 
@@ -159,18 +150,18 @@ on Windows_Compliance_Scan.csv
 
 **Recommendation:** Start with Sonnet for quick weekly scans, use Opus for quarterly deep-dives or audit preparation.
 
-## What Happens When You Run It
+## What Happens When You Invoke It
 
-1. **Agent starts**: Claude Code spawns the compliance-prioritizer agent
-2. **Data collection**: Agent fetches or reads your compliance scan data
-3. **Analysis**: Agent applies risk scoring algorithm to all failed checks
+1. **Skill starts**: Claude Code loads the compliance-prioritizer skill
+2. **Data collection**: The skill fetches or reads your compliance scan data
+3. **Analysis**: The skill applies risk scoring algorithm to all failed checks
 4. **Report generation**: Creates 4 comprehensive reports in your current directory:
    - `{scan_name}_prioritization.csv` - Sortable ranked list
    - `{scan_name}_report.md` - Executive summary with details
    - `{scan_name}_report.html` - Interactive dashboard
    - `{scan_name}_remediation_plan.md` - Step-by-step fixes
 
-5. **Summary**: Agent provides a summary of findings and next steps
+5. **Summary**: The skill provides a summary of findings and next steps
 
 ## Complete Example Walkthrough
 
@@ -191,10 +182,10 @@ cd ~/Downloads
 ls *.csv
 ```
 
-**Step 4**: Run the agent with natural language
+**Step 4**: Invoke the skill with natural language
 ```
-Please analyze the Windows CIS compliance scan in 
-Windows_Workstation_CIS_Benchmark_20240624.csv using the compliance-prioritizer agent.
+/compliance-prioritizer Analyze the Windows CIS compliance scan in 
+Windows_Workstation_CIS_Benchmark_20240624.csv
 
 Context: These are production workstations (criticality: 7/10) 
 used by the finance team handling sensitive data.
@@ -217,7 +208,7 @@ open Windows_Workstation_CIS_Benchmark_20240624_report.html
 ### Providing Context for Better Prioritization
 
 ```
-Run compliance-prioritizer on production_db_scan.csv
+/compliance-prioritizer Analyze production_db_scan.csv
 
 Asset context:
 - All hosts are production database servers (criticality: 10/10)
@@ -231,7 +222,7 @@ Focus on controls that protect data at rest and access controls.
 ### Analyzing Multiple Scans
 
 ```
-Analyze compliance across environments:
+/compliance-prioritizer Analyze compliance across environments:
 - Production: scan_prod.csv (criticality: 9/10)
 - Staging: scan_staging.csv (criticality: 5/10)  
 - Development: scan_dev.csv (criticality: 3/10)
@@ -242,7 +233,7 @@ Generate a consolidated report prioritizing production issues.
 ### Targeting Specific Compliance Frameworks
 
 ```
-Use compliance-prioritizer on our_scan.csv
+/compliance-prioritizer Analyze our_scan.csv
 
 Focus only on findings mapped to PCI-DSS requirements:
 - Requirement 8.x (Access Control)
@@ -253,19 +244,20 @@ We have a PCI audit in 30 days.
 
 ## Troubleshooting
 
-### "Agent not found" or "Unknown subagent_type"
+### "Skill not found" or "Unknown skill"
 
-**Problem**: The agent isn't installed correctly
+**Problem**: The skill isn't installed correctly
 
 **Solution**:
 ```bash
 # Verify installation
-ls -la ~/.claude/agents/compliance-prioritizer.md
+ls -la ~/.claude/skills/compliance-prioritizer/SKILL.md
 
 # If missing, reinstall
-cd ~/.claude/agents
 git clone https://github.com/dpickenstenable/tenable-compliance-prioritization.git
-cp tenable-compliance-prioritization/compliance-prioritizer.md .
+mkdir -p ~/.claude/skills/compliance-prioritizer
+cp tenable-compliance-prioritization/compliance-prioritizer/* ~/.claude/skills/compliance-prioritizer/
+chmod +x ~/.claude/skills/compliance-prioritizer/test-tenable-api.sh
 ```
 
 ### "File not found"
@@ -350,7 +342,7 @@ ls   # Verify file is there
 claude
 
 # In Claude Code:
-"Run compliance-prioritizer on this week's scan:
+"/compliance-prioritizer Analyze this week's scan:
 weekly_compliance_scan_2024-06-24.csv
 
 Compare to last week's results and highlight any new failures."
@@ -359,7 +351,7 @@ Compare to last week's results and highlight any new failures."
 ### Pre-Audit Preparation
 ```bash
 # 30 days before audit
-"Analyze all compliance scans for in-scope assets.
+"/compliance-prioritizer Analyze all compliance scans for in-scope assets.
 
 Context: SOC 2 Type II audit in 30 days.
 Priority: High and Critical findings that auditors will flag.
@@ -370,7 +362,7 @@ Generate focused remediation plan for audit readiness."
 ### Risk Committee Reporting
 ```bash
 # Quarterly
-"Analyze compliance for our legacy OT systems at scan_ot.csv
+"/compliance-prioritizer Analyze compliance for our legacy OT systems at scan_ot.csv
 
 Asset context: Isolated OT network (criticality: 5/10)
 
@@ -387,7 +379,7 @@ Format for risk acceptance committee review."
 - **Full Documentation**: See `README.md` for comprehensive details
 - **Setup Guide**: See `compliance-prioritizer-setup-guide.md` for API/MCP setup
 - **Quick Start**: See `QUICKSTART-compliance-prioritizer.md` for 3-minute start
-- **Test Script**: Run `~/.claude/agents/test-tenable-api.sh` to verify API connectivity
+- **Test Script**: Run `~/.claude/skills/compliance-prioritizer/test-tenable-api.sh` to verify API connectivity
 
 ## Tips for Best Results
 
@@ -399,8 +391,7 @@ Format for risk acceptance committee review."
 - Start with export files to understand output, then move to API for automation
 
 ❌ **DON'T**:
-- Try to run the JavaScript `Agent()` code yourself - let Claude Code handle it
-- Use vulnerability scan exports - this agent needs compliance scan data
+- Use vulnerability scan exports - this skill needs compliance scan data
 - Skip the context - generic analysis produces generic prioritization
 - Expect instant results - analysis takes 1-3 minutes depending on scan size
 
@@ -409,7 +400,7 @@ Format for risk acceptance committee review."
 **Ready to start?** Export a compliance scan from Tenable, open Claude Code, and say:
 
 ```
-"Run the compliance-prioritizer agent on my scan file at /path/to/scan.csv"
+"/compliance-prioritizer Analyze my scan file at /path/to/scan.csv"
 ```
 
-The agent will handle the rest!
+The skill will handle the rest!

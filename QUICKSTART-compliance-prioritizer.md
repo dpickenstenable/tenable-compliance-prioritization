@@ -7,12 +7,9 @@ Get started in 3 minutes with any of these methods.
 ### Step 1: Export your scan
 From Tenable UI: **Scans → Your Compliance Scan → Export → CSV**
 
-### Step 2: Run the agent
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Analyze /path/to/your/scan.csv"
-})
+### Step 2: Invoke the skill
+```
+/compliance-prioritizer Analyze /path/to/your/scan.csv
 ```
 
 ### Step 3: View reports
@@ -43,19 +40,16 @@ Check your directory for 4 generated reports:
 
 ### Step 2: Test connection (optional)
 ```bash
-cd ~/.claude/agents
+cd ~/.claude/skills/compliance-prioritizer/
 ./test-tenable-api.sh
 ```
 
-### Step 3: Run the agent
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Fetch compliance results from Tenable.io for scan ID 12345"
-})
+### Step 3: Invoke the skill
+```
+/compliance-prioritizer Fetch compliance results from Tenable.io for scan ID 12345
 ```
 
-Agent will prompt for:
+The skill will prompt for:
 - Platform (io/sc)
 - Access Key
 - Secret Key
@@ -88,11 +82,8 @@ Edit `~/.claude/config.json`:
 ### Step 2: Restart Claude Code
 
 ### Step 3: Use anytime
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Use Tenable MCP to analyze scan 12345"
-})
+```
+/compliance-prioritizer Use Tenable MCP to analyze scan 12345
 ```
 
 **Done!** No need to enter keys each time ✅
@@ -137,29 +128,20 @@ Check scan properties or use test script to list scans
 ## Common First Runs
 
 ### Just ran a Windows compliance scan?
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Analyze Windows_Compliance_Scan.csv"
-})
+```
+/compliance-prioritizer Analyze Windows_Compliance_Scan.csv
 ```
 
 ### Need to analyze production servers?
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: `Fetch from Tenable.io scan ID 12345
-  
-  Context: Production web servers (criticality: 9/10) with PCI data`
-})
+```
+/compliance-prioritizer Fetch from Tenable.io scan ID 12345
+
+Context: Production web servers (criticality: 9/10) with PCI data
 ```
 
 ### Weekly compliance check?
-```javascript
-Agent({
-  subagent_type: "compliance-prioritizer",
-  prompt: "Use MCP to get latest compliance for asset group 'Production'"
-})
+```
+/compliance-prioritizer Use MCP to get latest compliance for asset group 'Production'
 ```
 
 ---
@@ -167,11 +149,11 @@ Agent({
 ## Tips
 
 💡 **Provide context** for better prioritization:
-```javascript
-prompt: `Analyze scan.csv
+```
+/compliance-prioritizer Analyze scan.csv
 
 Asset context: These are production database servers (criticality: 10/10)
-handling customer PII and payment data.`
+handling customer PII and payment data.
 ```
 
 💡 **Test API before big runs**:
